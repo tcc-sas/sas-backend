@@ -9,7 +9,6 @@ public class SasBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SasBackendApplication.class, args);
-
 	}
 
 }
