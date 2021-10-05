@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.CORS;
+package com.fatec.sasbackend.cors;
 
 import java.io.IOException;
 import javax.servlet.Filter;
