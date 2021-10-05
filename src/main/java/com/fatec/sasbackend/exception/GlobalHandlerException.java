@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.Exception;
+package com.fatec.sasbackend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @ControllerAdvice
@@ -29,12 +28,7 @@ public class GlobalHandlerException {
 //            validationErrors.put(error, message);
 //        });
 //
-//        DefaultError error = new DefaultError(
-//                LocalDateTime.now(),
-//                HttpStatus.BAD_REQUEST.value(),
-//                "DATA VALIDATION",
-//                validationErrors,
-//                request.getRequestURI());
+//        DefaultError error = new DefaultError();
 //
 //        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 //    }
