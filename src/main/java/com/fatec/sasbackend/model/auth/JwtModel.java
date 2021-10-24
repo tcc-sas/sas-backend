@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.model;
+package com.fatec.sasbackend.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.model;
+package com.fatec.sasbackend.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.Set;
 public class UserRegisterModel {
 
     @NotBlank
-    @Size(min = 3, max = 45)
+    @Size(min = 3, max = 20)
     private String username;
 
     @NotBlank
