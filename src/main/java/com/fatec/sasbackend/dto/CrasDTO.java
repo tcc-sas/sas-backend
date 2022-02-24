@@ -1,5 +1,4 @@
-package com.fatec.sasbackend.model;
-
+package com.fatec.sasbackend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FuncionariosDTO {
-
-    private Long userId;
+public class CrasDTO {
+    private Long id;
     private String name;
-    private String username;
-    private String roleName;
 }

@@ -18,8 +18,6 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-
-
     @PostMapping("/login")
     public ResponseEntity<JwtModel> authenticateUser(@Valid @RequestBody UserLoginModel loginModel) {
 
@@ -28,15 +26,17 @@ public class AuthController {
         return ResponseEntity.ok(jwt);
     }
 
-    @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) {
+//    @PostMapping("/register")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) {
+//
+//        Boolean status = authService.registerUser(userRegisterModel);
+//
+//        if(!status){
+//            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+//        }
+//        return ResponseEntity.ok().body("User Registered Succesfully!");
+//    }
 
-        Boolean status = authService.registerUser(userRegisterModel);
 
-        if(!status){
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
-        return ResponseEntity.ok().body("User Registered Succesfully!");
-    }
 }

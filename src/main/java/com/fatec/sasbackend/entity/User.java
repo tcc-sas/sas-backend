@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,21 +27,29 @@ public class User {
 
     @NotBlank
     @Size(max = 45)
-    private String username;
+    private String name;
 
     @NotBlank
     @Size(max = 45)
-    private String name;
+    private String username;
 
     @NotBlank
     @Size(max = 75)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "cras_id", referencedColumnName = "id")
+    private Cras cras;
+
+    @NotNull
+    @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+
 
 
 }

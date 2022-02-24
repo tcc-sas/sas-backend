@@ -6,5 +6,5 @@ import com.fatec.sasbackend.model.auth.UserRegisterModel;
 
 public interface AuthService {
     JwtModel authenticateUser(UserLoginModel model);
-    Boolean registerUser(UserRegisterModel model);
+
 }
