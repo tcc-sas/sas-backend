@@ -41,31 +41,26 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public UserDTO fomEntityToDto(UserDTO dto, User entity) {
+    public UserDTO fromEntityToDto(UserDTO dto, User entity) {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setUsername(entity.getUsername());
         dto.setRoles(
-                roleConverter.fomEntityToDto(
-                        new RoleDTO(), getFirstRole(
+                roleConverter.fromEntityToDto(
+                        new RoleDTO(), roleConverter.getFirstRole(
                                 entity.getRoles()
                         )
                 )
         );
         dto.setCras(
-                crasConverter.fomEntityToDto(
+                crasConverter.fromEntityToDto(
                         new CrasDTO(), entity.getCras()
                 )
         );
         return dto;
     }
 
-    private Role getFirstRole(Set<Role> rolesSet) {
-        return rolesSet
-                .stream()
-                .min(Comparator.comparing(Role::getId))
-                .get();
-    }
+
 
 
 }

@@ -1,7 +1,6 @@
 package com.fatec.sasbackend.repository;
 
 import com.fatec.sasbackend.entity.User;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +28,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findPagedUsersByFilter(@Param("name") String name,
                                       @Param("cras") String cras,
                                       Pageable pageable);
+
+    @Query(
+        "SELECT u FROM User u "+
+            "WHERE u.username = :username "+
+            "AND u.id <> :id "
+    )
+    Optional<User> findSingleUsername(@Param("username") String username,
+                                      @Param("id") Long id);
+
 }

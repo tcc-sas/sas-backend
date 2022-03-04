@@ -2,7 +2,8 @@ package com.fatec.sasbackend.controller;
 
 import com.fatec.sasbackend.dto.UserDTO;
 import com.fatec.sasbackend.dto.UserSelectOptionsDTO;
-import com.fatec.sasbackend.model.auth.UserRegisterModel;
+import com.fatec.sasbackend.model.user.UserRegisterModel;
+import com.fatec.sasbackend.model.user.UserUpdateModel;
 import com.fatec.sasbackend.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,16 +15,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
-    private static final String NULL = null;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -35,10 +32,22 @@ public class UserController {
 
         Boolean status = userService.registerUser(userRegisterModel);
 
-        if (!status) {
+        if (Boolean.FALSE.equals(status)) {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
         return ResponseEntity.ok().body("User Registered Succesfully!");
+    }
+
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateModel userUpdateModel) {
+
+        Boolean status = userService.updateUser(userUpdateModel);
+
+        if (Boolean.FALSE.equals(status)) {
+            return ResponseEntity.badRequest().body("Error: Update failed");
+        }
+        return ResponseEntity.ok().body("User Updated Succesfully!");
     }
 
 
@@ -65,11 +74,11 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> findUserById(
+    public ResponseEntity<UserRegisterModel> findUserById(
             @PathVariable Long userId) {
 
-        UserDTO userDto = userService.findUserById(userId);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        UserRegisterModel userRegisterModel = userService.findUserById(userId);
+        return new ResponseEntity<>(userRegisterModel, HttpStatus.OK);
     }
 
 

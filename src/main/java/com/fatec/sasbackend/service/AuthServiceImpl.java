@@ -1,15 +1,7 @@
 package com.fatec.sasbackend.service;
 
-import com.fatec.sasbackend.dto.CrasDTO;
-import com.fatec.sasbackend.dto.RoleDTO;
-import com.fatec.sasbackend.entity.Role;
-import com.fatec.sasbackend.entity.Cras;
-import com.fatec.sasbackend.entity.User;
-import com.fatec.sasbackend.enums.ECras;
-import com.fatec.sasbackend.enums.ERole;
 import com.fatec.sasbackend.model.auth.JwtModel;
 import com.fatec.sasbackend.model.auth.UserLoginModel;
-import com.fatec.sasbackend.model.auth.UserRegisterModel;
 import com.fatec.sasbackend.repository.CrasRepository;
 import com.fatec.sasbackend.repository.RoleRepository;
 import com.fatec.sasbackend.repository.UserRepository;
@@ -23,10 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,49 +56,4 @@ public class AuthServiceImpl implements AuthService {
                 roles);
     }
 
-//    @Override
-//    public Boolean registerUser(UserRegisterModel model) {
-//        if (userRepository.existsByUsername(model.getUsername())) {
-//            return false;
-//        }
-//
-//        Set<Role> roles = findRoleByName(model.getRole());
-//        Cras cras = findCrasById(model.getCras());
-//
-//
-//        User user = new User(0L, model.getUsername(), model.getName(), encoder.encode(model.getPassword()), cras, roles);
-//        user.setRoles(roles);
-//        userRepository.save(user);
-//
-//        return true;
-//    }
-//
-//    private Set<Role> findRoleByName(RoleDTO role) {
-//        Set<Role> roles = new HashSet<>();
-//
-//        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//                .orElseThrow(() -> new RuntimeException("Error: Role not found."));
-//
-//        if(role.getName().equalsIgnoreCase("admin")){
-//            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//                    .orElseThrow(() -> new RuntimeException("Error: Role not found."));
-//            roles.add(adminRole);
-//            roles.add(userRole);
-//        } else {
-//            roles.add(userRole);
-//        }
-//
-//        return roles;
-//    }
-//
-//    private Cras findCrasById(CrasDTO crasDTO) {
-//        Cras cras = null;
-//
-//        if(crasDTO.getId() != null){
-//            cras = crasRepository.findById(cras.getId()).orElseThrow(
-//                    () -> new RuntimeException("Error: Cras not found")
-//            );
-//        }
-//        return cras;
-//    }
 }

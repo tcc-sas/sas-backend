@@ -4,6 +4,7 @@ package com.fatec.sasbackend.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),

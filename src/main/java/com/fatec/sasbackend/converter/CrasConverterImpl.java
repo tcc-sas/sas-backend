@@ -16,7 +16,7 @@ public class CrasConverterImpl implements CrasConverter {
     }
 
     @Override
-    public CrasDTO fomEntityToDto(CrasDTO dto, Cras entity) {
+    public CrasDTO fromEntityToDto(CrasDTO dto, Cras entity) {
         dto.setId(entity.getId());
         dto.setName(entity.getName().toString());
         return dto;

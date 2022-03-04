@@ -11,7 +11,8 @@ import com.fatec.sasbackend.entity.Cras;
 import com.fatec.sasbackend.entity.Role;
 import com.fatec.sasbackend.entity.User;
 import com.fatec.sasbackend.enums.ERole;
-import com.fatec.sasbackend.model.auth.UserRegisterModel;
+import com.fatec.sasbackend.model.user.UserRegisterModel;
+import com.fatec.sasbackend.model.user.UserUpdateModel;
 import com.fatec.sasbackend.repository.CrasRepository;
 import com.fatec.sasbackend.repository.RoleRepository;
 import com.fatec.sasbackend.repository.UserRepository;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> userDTO = repository.findAll(pageable)
                 .stream()
                 .distinct()
-                .map(user -> converter.fomEntityToDto(new UserDTO(), user))
-                .collect(Collectors.toList());
+                .map(user -> converter.fromEntityToDto(new UserDTO(), user))
+                .toList();
 
         return new PageImpl<>(userDTO);
     }
@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
                         pageable
                 ).stream()
                 .distinct()
-                .map(user -> converter.fomEntityToDto(new UserDTO(), user))
-                .collect(Collectors.toList());
+                .map(user -> converter.fromEntityToDto(new UserDTO(), user))
+                .toList();
 
         return new PageImpl<>(userDTO);
     }
@@ -77,16 +77,16 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .distinct()
                 .sorted(Comparator.comparing(Role::getName).reversed())
-                .map(role -> roleConverter.fomEntityToDto(new RoleDTO(), role))
-                .collect(Collectors.toList());
+                .map(role -> roleConverter.fromEntityToDto(new RoleDTO(), role))
+                .toList();
 
         List<CrasDTO> crasDTOS = crasRepository
                 .findAll()
                 .stream()
                 .distinct()
                 .sorted(Comparator.comparing(Cras::getName).reversed())
-                .map(cras -> crasConverter.fomEntityToDto(new CrasDTO(), cras))
-                .collect(Collectors.toList());
+                .map(cras -> crasConverter.fromEntityToDto(new CrasDTO(), cras))
+                .toList();
 
         return UserSelectOptionsDTO.builder()
                 .roles(roleDTOS)
@@ -95,16 +95,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findUserById(Long userId) {
-        return repository.findById(userId).map((user) -> {
-            return converter.fomEntityToDto(new UserDTO(), user);
-        }).orElseThrow(() -> new RuntimeException("Error: User not found."));
+    public UserRegisterModel findUserById(Long userId) {
+        return repository.findById(userId).map(user ->
+                UserRegisterModel.builder()
+                        .userId(user.getId())
+                        .name(user.getName())
+                        .username(user.getUsername())
+                        .cras(crasConverter.fromEntityToDto(new CrasDTO(), user.getCras()))
+                        .roles(roleConverter.fromEntityToDto(new RoleDTO(), roleConverter.getFirstRole(user.getRoles())))
+                        .build()
+        ).orElseThrow(() -> new RuntimeException("User not found!"));
     }
-
 
     @Override
     public Boolean registerUser(UserRegisterModel model) {
-        if (repository.existsByUsername(model.getUsername())) {
+        if (Boolean.TRUE.equals(repository.existsByUsername(model.getUsername()))) {
             return false;
         }
 
@@ -114,6 +119,37 @@ public class UserServiceImpl implements UserService {
 
         User user = new User(0L, model.getUsername(), model.getName(), encoder.encode(model.getPassword()), cras, roles);
         user.setRoles(roles);
+        repository.save(user);
+
+        return true;
+    }
+
+    public Boolean updateUser(UserUpdateModel model) {
+        if (Objects.isNull(model.getUserId())) {
+            return false;
+        }
+
+        if (Boolean.TRUE.equals(
+                repository.findSingleUsername(
+                        model.getUsername(),
+                        model.getUserId()).isPresent())
+        ) {
+            return false;
+        }
+
+        User user = repository.findById(model.getUserId()).get();
+
+        //REFATORAR O SET DE ROLES - NAO TA DAORA E NUNCA ESTEVE
+
+        user.setName(model.getName());
+        user.setUsername(model.getUsername());
+//        user.setRoles(
+//
+//        );
+        user.setCras(
+                crasConverter.fromDtoToEntity(new Cras(), model.getCras())
+        );
+
         repository.save(user);
 
         return true;

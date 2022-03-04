@@ -2,11 +2,9 @@ package com.fatec.sasbackend.controller;
 
 import com.fatec.sasbackend.model.auth.JwtModel;
 import com.fatec.sasbackend.model.auth.UserLoginModel;
-import com.fatec.sasbackend.model.auth.UserRegisterModel;
 import com.fatec.sasbackend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
