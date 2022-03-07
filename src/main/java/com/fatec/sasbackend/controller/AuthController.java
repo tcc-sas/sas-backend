@@ -2,11 +2,9 @@ package com.fatec.sasbackend.controller;
 
 import com.fatec.sasbackend.model.auth.JwtModel;
 import com.fatec.sasbackend.model.auth.UserLoginModel;
-import com.fatec.sasbackend.model.auth.UserRegisterModel;
 import com.fatec.sasbackend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +16,6 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-
-
     @PostMapping("/login")
     public ResponseEntity<JwtModel> authenticateUser(@Valid @RequestBody UserLoginModel loginModel) {
 
@@ -28,15 +24,17 @@ public class AuthController {
         return ResponseEntity.ok(jwt);
     }
 
-    @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) {
+//    @PostMapping("/register")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) {
+//
+//        Boolean status = authService.registerUser(userRegisterModel);
+//
+//        if(!status){
+//            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+//        }
+//        return ResponseEntity.ok().body("User Registered Succesfully!");
+//    }
 
-        Boolean status = authService.registerUser(userRegisterModel);
 
-        if(!status){
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
-        return ResponseEntity.ok().body("User Registered Succesfully!");
-    }
 }
