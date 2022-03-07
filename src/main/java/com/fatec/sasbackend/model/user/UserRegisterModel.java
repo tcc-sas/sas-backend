@@ -2,7 +2,6 @@ package com.fatec.sasbackend.model.user;
 
 import com.fatec.sasbackend.dto.CrasDTO;
 import com.fatec.sasbackend.dto.RoleDTO;
-import com.fatec.sasbackend.entity.Cras;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

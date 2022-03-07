@@ -8,9 +8,6 @@ import com.fatec.sasbackend.entity.Role;
 import com.fatec.sasbackend.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.Set;
-
 @Component
 public class UserConverterImpl implements UserConverter {
     private final RoleConverter roleConverter;
@@ -26,17 +23,8 @@ public class UserConverterImpl implements UserConverter {
         entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setUsername(dto.getUsername());
-        entity.setRoles(
-                Set.of(
-                    roleConverter.fromDtoToEntity(
-                        new Role(), dto.getRoles())
-                )
-        );
-        entity.setCras(
-                crasConverter.fromDtoToEntity(
-                        new Cras(), dto.getCras()
-                )
-        );
+        entity.setRoles(roleConverter.fromDtoToEntity(new Role(), dto.getRoles()));
+        entity.setCras(crasConverter.fromDtoToEntity(new Cras(), dto.getCras()));
         return entity;
     }
 
@@ -45,18 +33,8 @@ public class UserConverterImpl implements UserConverter {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setUsername(entity.getUsername());
-        dto.setRoles(
-                roleConverter.fromEntityToDto(
-                        new RoleDTO(), roleConverter.getFirstRole(
-                                entity.getRoles()
-                        )
-                )
-        );
-        dto.setCras(
-                crasConverter.fromEntityToDto(
-                        new CrasDTO(), entity.getCras()
-                )
-        );
+        dto.setRoles(roleConverter.fromEntityToDto(new RoleDTO(), entity.getRoles()));
+        dto.setCras(crasConverter.fromEntityToDto(new CrasDTO(), entity.getCras()));
         return dto;
     }
 

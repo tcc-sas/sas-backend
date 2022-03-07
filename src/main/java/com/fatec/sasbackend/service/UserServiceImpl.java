@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
                         .name(user.getName())
                         .username(user.getUsername())
                         .cras(crasConverter.fromEntityToDto(new CrasDTO(), user.getCras()))
-                        .roles(roleConverter.fromEntityToDto(new RoleDTO(), roleConverter.getFirstRole(user.getRoles())))
+                        .roles(roleConverter.fromEntityToDto(new RoleDTO(), user.getRoles()))
                         .build()
         ).orElseThrow(() -> new RuntimeException("User not found!"));
     }
@@ -113,12 +113,13 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        Set<Role> roles = findRoleByName(model.getRoles());
+
+        Role roles = findRoleById(model.getRoles());
         Cras cras = findCrasById(model.getCras());
 
 
         User user = new User(0L, model.getUsername(), model.getName(), encoder.encode(model.getPassword()), cras, roles);
-        user.setRoles(roles);
+
         repository.save(user);
 
         return true;
@@ -182,5 +183,16 @@ public class UserServiceImpl implements UserService {
             );
         }
         return cras;
+    }
+
+    private Role findRoleById(RoleDTO roleDTO) {
+        Role role = null;
+
+        if (roleDTO.getId() != null) {
+            role = roleRepository.findById(roleDTO.getId()).orElseThrow(
+                    () -> new RuntimeException("Error: Role not found")
+            );
+        }
+        return role;
     }
 }
