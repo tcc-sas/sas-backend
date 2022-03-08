@@ -144,9 +144,9 @@ public class UserServiceImpl implements UserService {
 
         user.setName(model.getName());
         user.setUsername(model.getUsername());
-//        user.setRoles(
-//
-//        );
+        user.setRoles(
+               roleConverter.fromDtoToEntity(new Role(), model.getRoles())
+        );
         user.setCras(
                 crasConverter.fromDtoToEntity(new Cras(), model.getCras())
         );

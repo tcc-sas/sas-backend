@@ -15,16 +15,16 @@ public class UserDetailsImpl implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private final Long id;
 
-    private String username;
+    private final String username;
 
     private final String name;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String name, String password,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -36,11 +36,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(user.getRoles().getName().name()));
-
-//                user.getRoles().stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-//                .collect(Collectors.toList());
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRoles().getName().name());
+        List<GrantedAuthority> authorities = Arrays.asList(simpleGrantedAuthority);
 
         return new UserDetailsImpl(
                 user.getId(),
