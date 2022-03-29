@@ -22,28 +22,45 @@ public class Beneficiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "beneficiary_id")
+    private Long beneficiaryId;
 
     @NotBlank
-    @Size(max = 45)
+    @Size(max = 70)
     private String name;
 
     @NotBlank
     @Size(max = 15)
-    @Column(name = "beneficiary_id")
-    private String beneficiaryId;
+    private String rg;
 
-    private String adress;
-
-    @Column(name = "zip_code")
-    private String zipCode;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @NotBlank
+    @Size(max = 15)
+    private String cpf;
 
     @Convert(converter = LocalDateConverter.class)
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
+    private String adress;
+
+    @Column(name = "house_number")
+    private Integer houseNumber;
+
+    private String district;
+
+    private String city;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+
+
+
 
     @ManyToOne
     @JoinColumn(name = "cras_id", referencedColumnName = "id")

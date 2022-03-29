@@ -17,24 +17,36 @@ public class BeneficiaryConverterImpl implements BeneficiaryConverter {
 
     @Override
     public Beneficiary fromDtoToEntity(Beneficiary entity, BeneficiaryDTO dto) {
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
         entity.setBeneficiaryId(dto.getBeneficiaryId());
-        entity.setAdress(dto.getAdress());
-        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setName(dto.getName());
+        entity.setRg(dto.getRg());
+        entity.setCpf(dto.getCpf());
+
         entity.setZipCode(dto.getZipCode());
+        entity.setAdress(dto.getAdress());
+        entity.setHouseNumber(dto.getHouseNumber());
+        entity.setDistrict(dto.getDistrict());
+        entity.setCity(dto.getCity());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+
         entity.setCras(crasConverter.fromDtoToEntity(new Cras(), dto.getCras()));
         return entity;
     }
 
     @Override
     public BeneficiaryDTO fromEntityToDto(BeneficiaryDTO dto, Beneficiary entity) {
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
         dto.setBeneficiaryId(entity.getBeneficiaryId());
-        dto.setAdress(entity.getAdress());
-        dto.setPhoneNumber(entity.getPhoneNumber());
+        dto.setName(entity.getName());
+        dto.setRg(entity.getRg());
+        dto.setCpf(entity.getCpf());
+
         dto.setZipCode(entity.getZipCode());
+        dto.setAdress(entity.getAdress());
+        dto.setHouseNumber(entity.getHouseNumber());
+        dto.setDistrict(entity.getDistrict());
+        dto.setCity(entity.getCity());
+        dto.setPhoneNumber(entity.getPhoneNumber());
+
         dto.setCras(crasConverter.fromEntityToDto(new CrasDTO(), entity.getCras()));
         return dto;
     }

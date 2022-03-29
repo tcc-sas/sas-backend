@@ -13,12 +13,18 @@ import java.time.LocalDate;
 @Data
 public class BeneficiaryDTO {
 
-    private Long id;
+    private Long beneficiaryId;
     private String name;
-    private String beneficiaryId;
-    private CrasDTO cras;
+    private String rg;
+    private String cpf;
+
     private String zipCode;
     private String adress;
+    private Integer houseNumber;
+    private String district;
+    private String city;
+
     private String phoneNumber;
     private LocalDate birthDate;
+    private CrasDTO cras;
 }

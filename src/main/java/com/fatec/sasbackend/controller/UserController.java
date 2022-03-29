@@ -89,4 +89,7 @@ public class UserController {
         return new ResponseEntity<>(selectOptionsDTO, HttpStatus.OK);
     }
 
+      //@TODO
+//    @DeleteMapping("/{userId}")
+
 }

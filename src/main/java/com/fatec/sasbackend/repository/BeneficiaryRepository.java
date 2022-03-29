@@ -12,18 +12,18 @@ import java.util.List;
 @Repository
 public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> {
 
-    Boolean existsByBeneficiaryId(String beneficiaryId);
+    Boolean existsByBeneficiaryId(Long beneficiaryId);
 
     @Query(
             "SELECT b FROM Beneficiary b "+
                     "LEFT JOIN b.cras c "+
                     "WHERE "+
                     "(:name = '' OR lower(b.name) = lower(:name)) "+
-                    "AND (:beneficiaryId = '' OR b.beneficiaryId = :beneficiaryId) "+
+                    "AND (:cpf = '' OR b.cpf = :cpf) "+
                     "AND (:cras = '' OR c.id = :cras) "
     )
     List<Beneficiary> findPagedBeneficiaryByFilter(@Param("name") String name,
-                                                   @Param("beneficiaryId") String beneficiaryId,
+                                                   @Param("cpf") String cpf,
                                                    @Param("cras") String cras,
                                                    Pageable pageable);
 
