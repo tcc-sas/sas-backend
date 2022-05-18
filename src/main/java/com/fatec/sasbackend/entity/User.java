@@ -2,6 +2,7 @@ package com.fatec.sasbackend.entity;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,40 +17,30 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 @DynamicUpdate
-@Table(	name = "user",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-        })
+@Builder
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 45)
     private String name;
 
-    @NotBlank
-    @Size(max = 45)
     private String username;
 
     @NotBlank
     @Size(max = 75)
     private String password;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "cras_id", referencedColumnName = "id")
     private Cras cras;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role roles;
-
-
 
 
 }

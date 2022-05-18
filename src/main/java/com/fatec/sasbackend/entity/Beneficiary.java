@@ -22,8 +22,8 @@ public class Beneficiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "beneficiary_id")
-    private Long beneficiaryId;
+    @Column(name = "id")
+    private Long id;
 
     @NotBlank
     @Size(max = 70)
@@ -41,8 +41,6 @@ public class Beneficiary {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-
-
     @Column(name = "zip_code")
     private String zipCode;
 
@@ -57,10 +55,6 @@ public class Beneficiary {
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-
-
-
 
     @ManyToOne
     @JoinColumn(name = "cras_id", referencedColumnName = "id")

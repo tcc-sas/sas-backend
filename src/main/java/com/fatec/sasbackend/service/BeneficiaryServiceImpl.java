@@ -7,18 +7,22 @@ import com.fatec.sasbackend.dto.BeneficiarySelectOptionsDTO;
 import com.fatec.sasbackend.dto.CrasDTO;
 import com.fatec.sasbackend.entity.Beneficiary;
 import com.fatec.sasbackend.entity.Cras;
+import com.fatec.sasbackend.exception.AlreadyExistsException;
+import com.fatec.sasbackend.exception.BadRequestException;
+import com.fatec.sasbackend.exception.NotFoundException;
 import com.fatec.sasbackend.repository.BeneficiaryRepository;
 import com.fatec.sasbackend.repository.CrasRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class BeneficiaryServiceImpl implements BeneficiaryService {
+ public class BeneficiaryServiceImpl implements BeneficiaryService {
 
     private final BeneficiaryRepository repository;
     private final BeneficiaryConverter converter;
@@ -33,30 +37,26 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     }
 
     @Override
-    public Boolean registerBeneficiary(BeneficiaryDTO beneficiaryDTO) {
+    public BeneficiaryDTO registerBeneficiary(BeneficiaryDTO beneficiaryDTO) {
 
-        if (Boolean.TRUE.equals(repository.existsByBeneficiaryId(beneficiaryDTO.getBeneficiaryId()))) {
-            return false;
+        if (repository.existsByCpf(beneficiaryDTO.getCpf())) {
+            throw new AlreadyExistsException("This CPF cannot be used");
         }
 
         Beneficiary beneficiary = converter.fromDtoToEntity(new Beneficiary(), beneficiaryDTO);
         repository.save(beneficiary);
 
-        return true;
+        return beneficiaryDTO;
     }
 
     @Override
     public Page<BeneficiaryDTO> findAllBeneficiary(Pageable pageable) {
-        List<BeneficiaryDTO> beneficiaryDTOs = repository.findAll(pageable)
-                .stream()
-                .map(user -> converter.fromEntityToDto(new BeneficiaryDTO(), user))
-                .toList();
-
-        return new PageImpl<>(beneficiaryDTOs);
+        return repository.findAll(pageable)
+                .map(b -> converter.fromEntityToDto(new BeneficiaryDTO(), b));
     }
 
     @Override
-    public BeneficiaryDTO findBeneficiaryById(Long id) {
+    public BeneficiaryDTO findById(Long id) {
         return repository.findById(id)
                 .map(beneficiary ->
                         converter.fromEntityToDto(new BeneficiaryDTO(), beneficiary))
@@ -78,21 +78,32 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     }
 
     @Override
-    public Page<BeneficiaryDTO> findPagedBeneficiaryByFilter(String name, String beneficiaryId, String cras, Pageable pageable) {
-        List<BeneficiaryDTO> beneficiariesDTO = repository.findPagedBeneficiaryByFilter(
+    public Page<BeneficiaryDTO> findPagedBeneficiaryByFilter(String name, String rg, String cpf, String cras, Pageable pageable) {
+        return repository.findPagedBeneficiaryByFilter(
                         name.toLowerCase(),
-                        beneficiaryId,
+                        rg,
+                        cpf,
                         cras,
                         pageable
-                ).stream()
-                .map(beneficiaries -> converter.fromEntityToDto(new BeneficiaryDTO(), beneficiaries))
-                .toList();
-
-        return new PageImpl<>(beneficiariesDTO);
+                )
+                .map(beneficiaries -> converter.fromEntityToDto(new BeneficiaryDTO(), beneficiaries));
     }
 
     @Override
-    public Boolean updateBeneficiary(BeneficiaryDTO model) {
-        return null;
+    @Transactional
+    public BeneficiaryDTO updateBeneficiary(BeneficiaryDTO dto) {
+        if (Objects.isNull(dto.getId())) {
+            throw new BadRequestException("Beneficiary ID cannot be null");
+        }
+
+        if(repository.checkIfCpfAlreadyUsed(dto.getId(),dto.getCpf())){
+            throw new AlreadyExistsException("This CPF cannot be used");
+        }
+
+        Beneficiary entity = repository.findById(dto.getId())
+                .map(beneficiary -> converter.fromDtoToEntity(beneficiary, dto))
+                .orElseThrow(() -> new NotFoundException("Beneficiary not found"));
+
+        return converter.fromEntityToDto(dto, entity);
     }
 }

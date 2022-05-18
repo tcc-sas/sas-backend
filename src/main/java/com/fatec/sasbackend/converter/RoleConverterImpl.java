@@ -38,12 +38,4 @@ public class RoleConverterImpl implements RoleConverter {
         }
         return null;
     }
-
-    @Override
-    public Role getFirstRole(Set<Role> rolesSet) {
-        return rolesSet
-                .stream()
-                .min(Comparator.comparing(Role::getId))
-                .get();
-    }
 }

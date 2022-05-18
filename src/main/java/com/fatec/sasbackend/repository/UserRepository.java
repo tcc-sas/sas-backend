@@ -1,20 +1,20 @@
 package com.fatec.sasbackend.repository;
 
 import com.fatec.sasbackend.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
-    Boolean existsByUsername(String username);
+
 
     @Query(
             "SELECT u FROM User u "+
@@ -25,16 +25,31 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "AND (:cras = '' OR c.id = :cras) "
 
     )
-    List<User> findPagedUsersByFilter(@Param("name") String name,
-                                      @Param("cras") String cras,
+    Page<User> findPagedUsersByFilter(@Param("name") String name,
+                                      @Param("cras") Long cras,
                                       Pageable pageable);
 
     @Query(
-        "SELECT u FROM User u "+
-            "WHERE u.username = :username "+
-            "AND u.id <> :id "
+        "SELECT " +
+                " CASE " +
+                    " WHEN count(u) > 0 THEN TRUE " +
+                    " ELSE FALSE " +
+                " END " +
+                " FROM User u " +
+                " WHERE (u.username = :username AND u.id <> :id) "
     )
-    Optional<User> findSingleUsername(@Param("username") String username,
+    Boolean checkIfUsernameAlreadyTakenToUpdate(@Param("username") String username,
                                       @Param("id") Long id);
 
+    @Query(
+            "SELECT" +
+                    " CASE " +
+                        " WHEN count(u) > 0 THEN TRUE" +
+                        " ELSE FALSE " +
+                    " END " +
+                    " FROM User u" +
+                    " WHERE (u.username = :username) "
+
+    )
+    Boolean checkIfUsernameAlreadyTaken(@Param("username") String username);
 }

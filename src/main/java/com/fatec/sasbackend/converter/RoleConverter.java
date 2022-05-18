@@ -6,5 +6,4 @@ import com.fatec.sasbackend.entity.Role;
 import java.util.Set;
 
 public interface RoleConverter extends Converter<Role, RoleDTO>{
-    Role getFirstRole(Set<Role> rolesSet);
 }

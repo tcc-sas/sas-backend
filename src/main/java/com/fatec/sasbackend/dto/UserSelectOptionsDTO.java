@@ -1,7 +1,5 @@
 package com.fatec.sasbackend.dto;
 
-import com.fatec.sasbackend.dto.CrasDTO;
-import com.fatec.sasbackend.dto.RoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

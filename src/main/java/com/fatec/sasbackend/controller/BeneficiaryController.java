@@ -2,14 +2,12 @@ package com.fatec.sasbackend.controller;
 
 import com.fatec.sasbackend.dto.BeneficiaryDTO;
 import com.fatec.sasbackend.dto.BeneficiarySelectOptionsDTO;
-import com.fatec.sasbackend.dto.UserDTO;
-import com.fatec.sasbackend.dto.UserSelectOptionsDTO;
-import com.fatec.sasbackend.model.user.UserRegisterModel;
-import com.fatec.sasbackend.model.user.UserUpdateModel;
+import com.fatec.sasbackend.entity.Beneficiary;
+import com.fatec.sasbackend.repository.BeneficiaryRepository;
 import com.fatec.sasbackend.service.BeneficiaryService;
-import com.fatec.sasbackend.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -18,15 +16,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/beneficiary")
 public class BeneficiaryController {
 
     private final BeneficiaryService beneficiaryService;
+    private final BeneficiaryRepository beneficiaryRepository;
 
-    public BeneficiaryController(BeneficiaryService beneficiaryService) {
+    public BeneficiaryController(BeneficiaryService beneficiaryService, BeneficiaryRepository beneficiaryRepository) {
         this.beneficiaryService = beneficiaryService;
+        this.beneficiaryRepository = beneficiaryRepository;
     }
 
     @GetMapping("/all")
@@ -41,46 +42,39 @@ public class BeneficiaryController {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<?> registerBeneficiary(@Valid @RequestBody BeneficiaryDTO beneficiaryDTO) {
+    public ResponseEntity<BeneficiaryDTO> registerBeneficiary(@Valid @RequestBody BeneficiaryDTO beneficiaryDTO) {
 
-        Boolean status = beneficiaryService.registerBeneficiary(beneficiaryDTO);
-
-        if (Boolean.FALSE.equals(status)) {
-            return ResponseEntity.badRequest().body("Error: Beneficiary already registered!");
-        }
-        return ResponseEntity.ok().body("Beneficiary Registered Succesfully!");
+        BeneficiaryDTO dto = beneficiaryService.registerBeneficiary(beneficiaryDTO);
+        return ResponseEntity.ok().body(dto);
     }
 
-    @GetMapping("/{beneficiaryId}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<BeneficiaryDTO> findBeneficiaryById(
-            @PathVariable Long beneficiaryId) {
+            @PathVariable Long id) {
 
-        BeneficiaryDTO beneficiaryDTO = beneficiaryService.findBeneficiaryById(beneficiaryId);
+        BeneficiaryDTO beneficiaryDTO = beneficiaryService.findById(id);
         return new ResponseEntity<>(beneficiaryDTO, HttpStatus.OK);
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<?> updateBeneficiary(@Valid @RequestBody BeneficiaryDTO beneficiaryDTO) {
+    public ResponseEntity<BeneficiaryDTO> updateBeneficiary(@Valid @RequestBody BeneficiaryDTO beneficiaryDTO) {
 
-        Boolean status = beneficiaryService.updateBeneficiary(beneficiaryDTO);
-
-        if (Boolean.FALSE.equals(status)) {
-            return ResponseEntity.badRequest().body("Error: Update failed");
-        }
-        return ResponseEntity.ok().body("User Updated Succesfully!");
+        BeneficiaryDTO dto = beneficiaryService.updateBeneficiary(beneficiaryDTO);
+        return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Page<BeneficiaryDTO>> findPagedBeneficiaryByFilter(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "beneficiaryId") String beneficiaryId,
+            @RequestParam(name = "rg") String rg,
+            @RequestParam(name = "cpf") String cpf,
             @RequestParam(name = "cras") String cras,
             @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<BeneficiaryDTO> filteredBeneficiary = beneficiaryService.findPagedBeneficiaryByFilter(name, beneficiaryId, cras, pageable);
+        Page<BeneficiaryDTO> filteredBeneficiary = beneficiaryService.findPagedBeneficiaryByFilter(name, rg, cpf, cras, pageable);
         return new ResponseEntity<>(filteredBeneficiary, HttpStatus.OK);
     }
 
