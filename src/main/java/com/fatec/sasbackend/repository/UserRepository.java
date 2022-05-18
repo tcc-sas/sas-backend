@@ -18,15 +18,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT u FROM User u "+
-                    "LEFT JOIN u.roles r "+
                     "LEFT JOIN u.cras c "+
                 "WHERE "+
-                    "(:name = '' OR lower(u.name) = lower(:name)) "+
+                    "(:name = '' OR lower(u.name) LIKE CONCAT('%', :name, '%')) "+
                     "AND (:cras = '' OR c.id = :cras) "
 
     )
     Page<User> findPagedUsersByFilter(@Param("name") String name,
-                                      @Param("cras") Long cras,
+                                      @Param("cras") String cras,
                                       Pageable pageable);
 
     @Query(

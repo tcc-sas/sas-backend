@@ -30,7 +30,7 @@ public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long> 
             "SELECT b FROM Beneficiary b " +
                     "LEFT JOIN b.cras c " +
                     "WHERE " +
-                    "(:name = '' OR lower(b.name) = lower(:name)) " +
+                    "(:name = '' OR lower(b.name) LIKE CONCAT('%', :name, '%')) " +
                     "AND (:rg = '' OR b.rg = :rg) " +
                     "AND (:cpf = '' OR b.cpf = :cpf) " +
                     "AND (:cras = '' OR c.id = :cras) "

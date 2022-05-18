@@ -39,7 +39,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserDTO>> findPagedUsersByFilter(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "cras") Long cras,
+            @RequestParam(name = "cras") String cras,
             @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<UserDTO> filteredUsers = userService.findPagedUsersByFilter(name, cras, pageable);

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "beneficiary", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "beneficiary_id")
+        @UniqueConstraint(columnNames = "cpf")
 })
 public class Beneficiary {
 

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     Page<UserDTO> findAllUsers(Pageable pageable);
-    Page<UserDTO> findPagedUsersByFilter(String name, Long cras, Pageable pageable);
+    Page<UserDTO> findPagedUsersByFilter(String name, String cras, Pageable pageable);
 
     UserDTO findUserById(Long userId);
     UserDTO updateUser(UserDTO dto);

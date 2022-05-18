@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> findPagedUsersByFilter(String name, Long cras, Pageable pageable) {
+    public Page<UserDTO> findPagedUsersByFilter(String name, String cras, Pageable pageable) {
         return repository.findPagedUsersByFilter(
                         name.toLowerCase(),
                         cras,
