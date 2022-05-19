@@ -1,7 +1,7 @@
 package com.fatec.sasbackend.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fatec.sasbackend.entity.User;
+import com.fatec.sasbackend.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

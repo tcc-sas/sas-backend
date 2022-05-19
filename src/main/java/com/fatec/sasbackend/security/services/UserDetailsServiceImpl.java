@@ -1,7 +1,7 @@
 package com.fatec.sasbackend.security.services;
 
-import com.fatec.sasbackend.entity.User;
-import com.fatec.sasbackend.repository.UserRepository;
+import com.fatec.sasbackend.user.User;
+import com.fatec.sasbackend.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
