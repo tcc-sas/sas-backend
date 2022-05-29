@@ -45,32 +45,38 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDTO updateProduct(ProductDTO dto) {
-        if(Objects.isNull(dto.getId())){
+        if (Objects.isNull(dto.getId())) {
             throw new BadRequestException("Product ID is null");
         }
 
-        if(productRepository.checkIfNameIsAlreadyTakenToUpdate(dto.getId(), dto.getName())){
+        if (Boolean.TRUE.equals(productRepository.checkIfNameIsAlreadyTakenToUpdate(dto.getId(), dto.getName()))) {
             throw new AlreadyExistsException("Product with name " + dto.getName() + " is already taken");
         }
 
         Product entity = productRepository.findById(dto.getId())
                 .map(product -> productConverter.fromDtoToEntity(product, dto))
-                .orElseThrow(( ) -> new NotFoundException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Product not found"));
 
         return productConverter.fromEntityToDto(dto, entity);
     }
 
     @Override
     public ProductDTO registerProduct(ProductDTO dto) {
-        if(productRepository.checkIfNameIsAlreadyTaken(dto.getName())){
+        if (Boolean.TRUE.equals(productRepository.checkIfNameIsAlreadyTaken(dto.getName()))) {
             throw new AlreadyExistsException("Username Already taken");
         }
 
-        Product entity = productRepository.findById(dto.getId())
-                .map(product -> productConverter.fromDtoToEntity(product, dto))
-                .orElseThrow(( ) -> new NotFoundException("Product not found"));
+        Product entity = productConverter.fromDtoToEntity(new Product(), dto);
 
         productRepository.save(entity);
         return dto;
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        Product entity = productRepository.findById(Long.parseLong(id))
+                .orElseThrow(() -> new NotFoundException("Product not found!"));
+
+        productRepository.deleteById(Long.parseLong(id));
     }
 }

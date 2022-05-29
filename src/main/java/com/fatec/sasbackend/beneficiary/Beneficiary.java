@@ -22,7 +22,6 @@ public class Beneficiary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @NotBlank
@@ -44,7 +43,7 @@ public class Beneficiary {
     @Column(name = "zip_code")
     private String zipCode;
 
-    private String adress;
+    private String address;
 
     @Column(name = "house_number")
     private Integer houseNumber;

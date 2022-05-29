@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
- public class BeneficiaryServiceImpl implements BeneficiaryService {
+public class BeneficiaryServiceImpl implements BeneficiaryService {
 
     private final BeneficiaryRepository repository;
     private final BeneficiaryConverter converter;
@@ -91,7 +91,7 @@ import java.util.Objects;
             throw new BadRequestException("Beneficiary ID cannot be null");
         }
 
-        if(repository.checkIfCpfAlreadyUsed(dto.getId(),dto.getCpf())){
+        if (Boolean.TRUE.equals(repository.checkIfCpfAlreadyUsed(dto.getId(), dto.getCpf()))) {
             throw new AlreadyExistsException("This CPF cannot be used");
         }
 
@@ -100,5 +100,13 @@ import java.util.Objects;
                 .orElseThrow(() -> new NotFoundException("Beneficiary not found"));
 
         return converter.fromEntityToDto(dto, entity);
+    }
+
+    @Override
+    public void deleteBeneficiary(String id) {
+        repository.findById(Long.parseLong(id))
+                .orElseThrow(() -> new NotFoundException("Beneficiary not found"));
+
+        repository.deleteById(Long.parseLong(id));
     }
 }

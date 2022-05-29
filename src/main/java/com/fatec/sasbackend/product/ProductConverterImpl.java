@@ -9,6 +9,8 @@ public class ProductConverterImpl implements ProductConverter {
         entity.setId(dto.getId());
         entity.setProductId(dto.getProductId());
         entity.setName(dto.getName());
+        entity.setUnity(dto.getUnity());
+        entity.setDescription(dto.getDescription());
         return entity;
     }
 
@@ -17,6 +19,8 @@ public class ProductConverterImpl implements ProductConverter {
         dto.setId(entity.getId());
         dto.setProductId(entity.getProductId());
         dto.setName(entity.getName());
+        dto.setUnity(entity.getUnity());
+        dto.setDescription(entity.getDescription());
         return dto;
     }
 }

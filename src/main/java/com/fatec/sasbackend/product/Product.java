@@ -23,4 +23,8 @@ public class Product {
     private String productId;
 
     private String name;
+
+    private String unity;
+
+    private String description;
 }

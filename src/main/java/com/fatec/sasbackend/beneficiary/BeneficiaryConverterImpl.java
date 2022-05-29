@@ -22,7 +22,7 @@ public class BeneficiaryConverterImpl implements BeneficiaryConverter {
         entity.setCpf(dto.getCpf());
 
         entity.setZipCode(dto.getZipCode());
-        entity.setAdress(dto.getAdress());
+        entity.setAddress(dto.getAddress());
         entity.setHouseNumber(dto.getHouseNumber());
         entity.setDistrict(dto.getDistrict());
         entity.setCity(dto.getCity());
@@ -42,7 +42,7 @@ public class BeneficiaryConverterImpl implements BeneficiaryConverter {
         dto.setCpf(entity.getCpf());
 
         dto.setZipCode(entity.getZipCode());
-        dto.setAdress(entity.getAdress());
+        dto.setAddress(entity.getAddress());
         dto.setHouseNumber(entity.getHouseNumber());
         dto.setDistrict(entity.getDistrict());
         dto.setCity(entity.getCity());

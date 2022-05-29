@@ -13,4 +13,6 @@ public interface ProductService {
     ProductDTO updateProduct(ProductDTO dto);
 
     ProductDTO registerProduct(ProductDTO dto);
+
+    void deleteProduct(String id);
 }

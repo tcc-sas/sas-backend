@@ -28,7 +28,7 @@ public class BeneficiaryDTO {
     private String cpf;
 
     private String zipCode;
-    private String adress;
+    private String address;
     private Integer houseNumber;
     private String district;
     private String city;

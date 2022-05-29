@@ -78,4 +78,11 @@ public class BeneficiaryController {
         return new ResponseEntity<>(selectOptionsDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<HttpStatus> deleteBeneficiary(@RequestParam String id) {
+        beneficiaryService.deleteBeneficiary(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
