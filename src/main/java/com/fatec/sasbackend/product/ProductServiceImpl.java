@@ -16,6 +16,8 @@ import java.util.Objects;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    public static final String PRODUCT_NOT_FOUND = "Produto não encontrado!";
+
     private final ProductRepository productRepository;
     private final ProductConverter productConverter;
 
@@ -39,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findProductById(Long id) {
         return productRepository.findById(id)
                 .map(product -> productConverter.fromEntityToDto(new ProductDTO(), product))
-                .orElseThrow(() -> new NotFoundException("Product not found!"));
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
     }
 
     @Override
@@ -50,12 +52,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (Boolean.TRUE.equals(productRepository.checkIfNameIsAlreadyTakenToUpdate(dto.getId(), dto.getName()))) {
-            throw new AlreadyExistsException("Product with name " + dto.getName() + " is already taken");
+            throw new AlreadyExistsException("Produto " + dto.getName().toUpperCase() + " já cadastrado!");
         }
 
         Product entity = productRepository.findById(dto.getId())
                 .map(product -> productConverter.fromDtoToEntity(product, dto))
-                .orElseThrow(() -> new NotFoundException("Product not found"));
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
         return productConverter.fromEntityToDto(dto, entity);
     }
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO registerProduct(ProductDTO dto) {
         if (Boolean.TRUE.equals(productRepository.checkIfNameIsAlreadyTaken(dto.getName()))) {
-            throw new AlreadyExistsException("Username Already taken");
+            throw new AlreadyExistsException("Produto " + dto.getName().toUpperCase() + " já cadastrado!");
         }
 
         Product entity = productConverter.fromDtoToEntity(new Product(), dto);
@@ -75,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String id) {
         Product entity = productRepository.findById(Long.parseLong(id))
-                .orElseThrow(() -> new NotFoundException("Product not found!"));
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
 
         productRepository.deleteById(Long.parseLong(id));
     }

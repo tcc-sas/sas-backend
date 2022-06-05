@@ -29,6 +29,7 @@ public class UserDTO {
     @NotNull(message = "O nível de permissão não pode ser nulo")
     private RoleDTO roles;
 
+    @NotBlank(message = "A unidade não pode ser nula")
     @NotNull(message = "A unidade não pode ser nula")
     private CrasDTO cras;
 }

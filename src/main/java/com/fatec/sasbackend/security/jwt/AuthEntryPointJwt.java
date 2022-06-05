@@ -20,7 +20,19 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
         logger.error("Unauthorized error: {}", authException.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuário ou senha inválidos!");
+        String errorMessage = formatMessageResponse(authException.getMessage());
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, errorMessage);
     }
+
+    private String formatMessageResponse(String message){
+        return switch (message) {
+            case ("Bad credentials") -> "Login ou senha inválidos!";
+            case ("Full authentication is required to access this resource") -> "Sua Sessão expirou! Realize o acesso novamente";
+            default -> message;
+        };
+
+    }
+
+
 
 }

@@ -16,8 +16,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+
+
 @Service
 public class BeneficiaryServiceImpl implements BeneficiaryService {
+
+    public static final String BENEFICIARY_NOT_FOUND = "Beneficiário não encontrado!";
+    public static final String CPF_ALREADY_TAKEN = "CPF já cadastrado";
 
     private final BeneficiaryRepository repository;
     private final BeneficiaryConverter converter;
@@ -34,8 +39,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     @Override
     public BeneficiaryDTO registerBeneficiary(BeneficiaryDTO beneficiaryDTO) {
 
-        if (repository.existsByCpf(beneficiaryDTO.getCpf())) {
-            throw new AlreadyExistsException("This CPF cannot be used");
+        if (Boolean.TRUE.equals(repository.existsByCpf(beneficiaryDTO.getCpf()))) {
+            throw new AlreadyExistsException(CPF_ALREADY_TAKEN);
         }
 
         Beneficiary beneficiary = converter.fromDtoToEntity(new Beneficiary(), beneficiaryDTO);
@@ -56,7 +61,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
                 .map(beneficiary ->
                         converter.fromEntityToDto(new BeneficiaryDTO(), beneficiary))
                 .orElseThrow(() ->
-                        new RuntimeException("Beneficiary Not Found!"));
+                        new NotFoundException(BENEFICIARY_NOT_FOUND));
     }
 
     @Override
@@ -92,12 +97,12 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         }
 
         if (Boolean.TRUE.equals(repository.checkIfCpfAlreadyUsed(dto.getId(), dto.getCpf()))) {
-            throw new AlreadyExistsException("This CPF cannot be used");
+            throw new AlreadyExistsException(CPF_ALREADY_TAKEN);
         }
 
         Beneficiary entity = repository.findById(dto.getId())
                 .map(beneficiary -> converter.fromDtoToEntity(beneficiary, dto))
-                .orElseThrow(() -> new NotFoundException("Beneficiary not found"));
+                .orElseThrow(() -> new NotFoundException(BENEFICIARY_NOT_FOUND));
 
         return converter.fromEntityToDto(dto, entity);
     }
@@ -105,8 +110,10 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     @Override
     public void deleteBeneficiary(String id) {
         repository.findById(Long.parseLong(id))
-                .orElseThrow(() -> new NotFoundException("Beneficiary not found"));
+                .orElseThrow(() -> new NotFoundException(BENEFICIARY_NOT_FOUND));
 
         repository.deleteById(Long.parseLong(id));
     }
+
+
 }

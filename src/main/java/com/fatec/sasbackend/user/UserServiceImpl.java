@@ -26,6 +26,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    public static final String USER_NOT_FOUND = "Usuário não encontrado!";
+    public static final String USER_ALREADY_TAKEN = "Usuário já cadastrado!";
+
     private final UserRepository repository;
     private final UserConverter converter;
     private final RoleRepository roleRepository;
@@ -78,13 +81,13 @@ public class UserServiceImpl implements UserService {
     public UserDTO findUserById(Long userId) {
         return repository.findById(userId)
                 .map(user -> converter.fromEntityToDto(new UserDTO(), user))
-                .orElseThrow(() -> new NotFoundException("User ID " + userId + " not found"));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
     @Override
     public UserRegisterDTO registerUser(UserRegisterDTO dto) {
-        if(repository.checkIfUsernameIsAlreadyTaken(dto.getUsername())){
-            throw new AlreadyExistsException("Username Already taken");
+        if(Boolean.TRUE.equals(repository.checkIfUsernameIsAlreadyTaken(dto.getUsername()))){
+            throw new AlreadyExistsException(USER_ALREADY_TAKEN);
         }
 
         User user = User.builder()
@@ -108,13 +111,13 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("User ID cannot be null");
         }
 
-        if (repository.checkIfUsernameIsAlreadyTakenToUpdate(dto.getUsername(), dto.getId())) {
-            throw new AlreadyExistsException("Username is already taken");
+        if (Boolean.TRUE.equals(repository.checkIfUsernameIsAlreadyTakenToUpdate(dto.getUsername(), dto.getId()))) {
+            throw new AlreadyExistsException(USER_ALREADY_TAKEN);
         }
 
         User entity = repository.findById(dto.getId())
                 .map(user -> converter.fromDtoToEntity(user, dto))
-                .orElseThrow(() -> new NotFoundException("User not found!"));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         return converter.fromEntityToDto(dto, entity);
     }
