@@ -1,5 +1,6 @@
 package com.fatec.sasbackend.stock;
 
+import com.fatec.sasbackend.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/stock")
@@ -38,30 +40,19 @@ public class StockController {
         return ResponseEntity.ok(filteredStock);
     }
 
+
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StockDTO> registerProduct(@Valid @RequestBody StockDTO dto) {
+    public ResponseEntity<List<StockDTO>> registerProduct(@Valid @RequestBody List<StockDTO> dto) {
 
-        StockDTO userDTO = stockService.registerStock(dto);
+        List<StockDTO> userDTO = stockService.saveInStock(dto);
         return ResponseEntity.ok().body(userDTO);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/products-to-add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StockDTO> findStockById(
-            @PathVariable Long userId) {
-
-        StockDTO userDTO = stockService.findStockById(userId);
-        return ResponseEntity.ok().body(userDTO);
+    public ResponseEntity<List<Product>> productsToAdd(){
+        return null;
     }
 
-    @PutMapping("/update")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StockDTO> updateStock(@Valid @RequestBody StockDTO userDto) {
-        StockDTO user = stockService.updateStock(userDto);
-        return ResponseEntity.ok().body(user);
-    }
-
-    //@TODO
-    //@DeleteMapping("/{id}")
 }

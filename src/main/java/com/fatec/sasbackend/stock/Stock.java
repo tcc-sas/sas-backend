@@ -24,7 +24,7 @@ public class Stock {
     private Product productId;
 
     @Column(name = "product_quantity")
-    private Long productQuantity;
+    private Integer productQuantity;
 
     @ManyToOne
     @JoinColumn(name = "cras_id", referencedColumnName = "id")
