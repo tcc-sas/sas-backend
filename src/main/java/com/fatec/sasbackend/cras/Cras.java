@@ -20,8 +20,4 @@ public class Cras {
     @Column(length = 20)
     private ECras name;
 
-    @Override
-    public String toString() {
-        return name.toString();
-    }
 }
