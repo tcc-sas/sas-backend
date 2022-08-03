@@ -27,4 +27,7 @@ public class Product {
     private String unity;
 
     private String description;
+
+    @Column(name = "available_quantity")
+    private Integer availableQuantity;
 }

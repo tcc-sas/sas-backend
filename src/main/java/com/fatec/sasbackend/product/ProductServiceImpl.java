@@ -25,7 +25,6 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductDTO> findAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(product -> productConverter.fromEntityToDto(new ProductDTO(), product));
-
     }
 
     @Override
@@ -78,6 +77,10 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(String id) {
         Product entity = productRepository.findById(Long.parseLong(id))
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND));
+
+        if(entity.getAvailableQuantity() > 0) {
+            throw new BadRequestException("Produtos com quantidades disponiveis não podem ser excluidos do estoque!");
+        }
 
         productRepository.deleteById(Long.parseLong(id));
     }

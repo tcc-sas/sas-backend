@@ -18,4 +18,6 @@ public class ProductDTO {
     private String unity;
 
     private String description;
+
+    private Integer availableQuantity;
 }
