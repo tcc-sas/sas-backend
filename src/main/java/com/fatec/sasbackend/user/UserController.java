@@ -66,7 +66,7 @@ public class UserController {
     //@TODO
     //@DeleteMapping("/{userId}")
 
-    @GetMapping("/selectOptions")
+    @GetMapping("/select-options")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserSelectOptionsDTO> findSelectOptions() {
         UserSelectOptionsDTO selectOptionsDTO = userService.findSelectOptions();

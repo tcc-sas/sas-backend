@@ -1,6 +1,6 @@
 package com.fatec.sasbackend.stock;
 
-import com.fatec.sasbackend.product.Product;
+import com.fatec.sasbackend.product.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,36 +23,42 @@ public class StockController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<StockDTO>> findAllPagedStock(
-            @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<StockDTO> userDTO = stockService.findAllStock(pageable);
-        return ResponseEntity.ok().body(userDTO);
+        Page<StockDTO> stock = stockService.findAllStock(pageable);
+        return ResponseEntity.ok().body(stock);
     }
 
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<StockDTO>> findPagedStockByFilter(
-            @RequestParam(name = "productId") String productId,
-            @RequestParam(name = "name") String name,
-            @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+            @RequestParam(name = "product") Long product,
+            @RequestParam(name = "cras") Long cras,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<StockDTO> filteredStock = stockService.findPagedStockByFilter(pageable, productId, name);
+        Page<StockDTO> filteredStock = stockService.findPagedStockByFilter(pageable, product, cras);
         return ResponseEntity.ok(filteredStock);
     }
 
-
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<StockDTO>> registerProduct(@Valid @RequestBody List<StockDTO> dto) {
+    public ResponseEntity<List<Stock>> registerProduct(@Valid @RequestBody List<StockDTO> dto) {
 
-        List<StockDTO> userDTO = stockService.saveInStock(dto);
-        return ResponseEntity.ok().body(userDTO);
+        List<Stock> stockList = stockService.saveInStock(dto);
+        return ResponseEntity.ok().body(stockList);
     }
 
-    @GetMapping("/products-to-add")
+    @GetMapping("/registration-options")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Product>> productsToAdd(){
-        return null;
+    public ResponseEntity<StockRegistrationOptionsDTO> getRegistrationOptions(){
+        StockRegistrationOptionsDTO stockRegistrationOptionsDTO = stockService.findRegistrationOptions();
+
+        return ResponseEntity.ok().body(stockRegistrationOptionsDTO);
     }
 
+    @GetMapping("/select-options")
+    public ResponseEntity<StockSelectOptions> getSelectOptions(){
+        StockSelectOptions selectOptions = stockService.findSelectOptions();
+        return ResponseEntity.ok().body(selectOptions);
+    }
 }

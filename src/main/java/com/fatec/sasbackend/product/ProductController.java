@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
@@ -24,8 +25,8 @@ public class ProductController {
     public ResponseEntity<Page<ProductDTO>> findAllPagedProducts(
             @PageableDefault(page = 0, size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<ProductDTO> userDTO = productService.findAllProducts(pageable);
-        return ResponseEntity.ok().body(userDTO);
+        Page<ProductDTO> productDTO = productService.findAllProducts(pageable);
+        return ResponseEntity.ok().body(productDTO);
     }
 
     @GetMapping("/filter")
@@ -43,8 +44,8 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> registerProduct(@Valid @RequestBody ProductDTO dto) {
 
-        ProductDTO userDTO = productService.registerProduct(dto);
-        return ResponseEntity.ok().body(userDTO);
+        ProductDTO productDTO = productService.registerProduct(dto);
+        return ResponseEntity.ok().body(productDTO);
     }
 
     @GetMapping("/{userId}")
@@ -52,15 +53,15 @@ public class ProductController {
     public ResponseEntity<ProductDTO> findProductById(
             @PathVariable Long userId) {
 
-        ProductDTO userDTO = productService.findProductById(userId);
-        return ResponseEntity.ok().body(userDTO);
+        ProductDTO productDTO = productService.findProductById(userId);
+        return ResponseEntity.ok().body(productDTO);
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO userDto) {
-        ProductDTO user = productService.updateProduct(userDto);
-        return ResponseEntity.ok().body(user);
+        ProductDTO productDTO = productService.updateProduct(userDto);
+        return ResponseEntity.ok().body(productDTO);
     }
 
     @DeleteMapping("/delete")
@@ -68,5 +69,12 @@ public class ProductController {
     public ResponseEntity<HttpStatus> deleteProduct(@RequestParam String id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/product-beneficiary")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<SimpleProductDTO>> findProductsForBeneficiary() {
+         List<SimpleProductDTO> productDTOS = productService.findProductsForBeneficiary();
+        return ResponseEntity.ok().body(productDTOS);
     }
 }
