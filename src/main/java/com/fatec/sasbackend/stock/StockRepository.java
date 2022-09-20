@@ -12,43 +12,33 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
 
     @Query(
-            " SELECT p " +
-                    " FROM Product p WHERE " +
-                    " (:productId = '' OR p.productId = :productId) " +
-                    " AND (:name = '' OR LOWER(p.name) LIKE CONCAT('%', :name, '%')) "
+            " SELECT s " +
+                    " FROM Stock s " +
+                    "LEFT JOIN s.product p "+
+                    "LEFT JOIN s.cras c "+
+                "WHERE " +
+                    " (:product is null OR p.id = :product) " +
+                    " AND (:cras is null OR c.id = :cras)"
     )
-    Page<Stock> findPagedProductsByFilter(
-            @Param("productId") String productId,
-            @Param("name") String name,
+    Page<Stock> findPagedStockByFilter(
+            @Param("product") Long product,
+            @Param("cras") Long cras,
             Pageable pageable);
 
 
     @Query(
-          "SELECT " +
-                  "CASE " +
-                      "WHEN COUNT(p) > 0 THEN TRUE " +
-                      "ELSE FALSE " +
-                  "END "+
-                  " FROM Product p " +
-                  " WHERE (p.name = :name AND p.id <> :id)"
+          " SELECT s " +
+              " FROM Stock s " +
+              " LEFT JOIN s.product p "+
+              " LEFT JOIN s.cras c "+
+              " WHERE " +
+                  " p.id = :product AND" +
+                  " c.id = :cras "
     )
-    Boolean checkIfNameIsAlreadyTakenToUpdate(
-            @Param("id") Long id,
-            @Param("name") String name);
+    Stock checkIfProductIsOnStockByNameAndCras(
+            @Param("product") Long product,
+            @Param("cras") Long cras);
 
-
-    @Query(
-            " SELECT " +
-                    " CASE " +
-                        " WHEN COUNT(p) > 0 THEN TRUE " +
-                        " ELSE FALSE " +
-                    " END " +
-                    " FROM Product p " +
-                    " WHERE p.name = :name "
-
-    )
-    Boolean checkIfNameIsAlreadyTaken(
-            @Param("name") String name);
 
 
 }

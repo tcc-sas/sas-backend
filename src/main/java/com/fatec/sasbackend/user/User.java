@@ -16,9 +16,9 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @DynamicUpdate
-@Builder
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
 })

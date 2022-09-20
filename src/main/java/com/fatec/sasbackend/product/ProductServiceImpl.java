@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -83,5 +84,18 @@ public class ProductServiceImpl implements ProductService {
         }
 
         productRepository.deleteById(Long.parseLong(id));
+    }
+
+
+    @Override
+    public List<SimpleProductDTO> findProductsForBeneficiary() {
+        return productRepository.findAll()
+                .stream()
+                .map(product -> SimpleProductDTO.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .build()
+                )
+                .toList();
     }
 }

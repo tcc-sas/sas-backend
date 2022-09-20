@@ -71,7 +71,7 @@ public class BeneficiaryController {
         return new ResponseEntity<>(filteredBeneficiary, HttpStatus.OK);
     }
 
-    @GetMapping("/selectOptions")
+    @GetMapping("/select-options")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<BeneficiarySelectOptionsDTO> findSelectOptions() {
         BeneficiarySelectOptionsDTO selectOptionsDTO = beneficiaryService.findSelectOptions();
