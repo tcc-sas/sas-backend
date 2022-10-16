@@ -7,15 +7,14 @@ import com.fatec.sasbackend.exception.AlreadyExistsException;
 import com.fatec.sasbackend.exception.BadRequestException;
 import com.fatec.sasbackend.exception.NotFoundException;
 import com.fatec.sasbackend.cras.CrasRepository;
+import com.fatec.sasbackend.product.ProductRepository;
+import com.fatec.sasbackend.product.SimpleProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
+import java.util.*;
 
 
 @Service
@@ -29,11 +28,17 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
     private final CrasRepository crasRepository;
     private final CrasConverter crasConverter;
 
-    public BeneficiaryServiceImpl(BeneficiaryRepository repository, BeneficiaryConverter converter, CrasRepository crasRepository, CrasConverter crasConverter) {
+    private final ProductRepository productRepository;
+
+    private final BeneficiaryProductsRepository beneficiaryProductsRepository;
+
+    public BeneficiaryServiceImpl(BeneficiaryRepository repository, BeneficiaryConverter converter, CrasRepository crasRepository, CrasConverter crasConverter, ProductRepository productRepository, BeneficiaryProductsRepository beneficiaryProductsRepository) {
         this.repository = repository;
         this.converter = converter;
         this.crasRepository = crasRepository;
         this.crasConverter = crasConverter;
+        this.productRepository = productRepository;
+        this.beneficiaryProductsRepository = beneficiaryProductsRepository;
     }
 
     @Override
@@ -105,6 +110,52 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
                 .orElseThrow(() -> new NotFoundException(BENEFICIARY_NOT_FOUND));
 
         return converter.fromEntityToDto(dto, entity);
+    }
+
+
+    @Override
+    @Transactional
+    public BeneficiaryProductsDTO registerBeneficiaryProducts(BeneficiaryProductsDTO beneficiaryProductsDTO) {
+        Beneficiary beneficiary = repository.getById(beneficiaryProductsDTO.getBeneficiaryId());
+
+        List<BeneficiaryProducts> beneficiaryProductsList = new ArrayList<>(
+                beneficiaryProductsDTO.getProductsDTO()
+                        .stream()
+                        .map(dto -> BeneficiaryProducts.builder()
+                                .beneficiary(beneficiary)
+                                .product(productRepository.getById(dto.getId()))
+                                .quantity(dto.getQuantity())
+                                .build()
+                        ).toList()
+        );
+
+        beneficiaryProductsRepository.deleteAllByBeneficiaryId(beneficiary.getId());
+        beneficiaryProductsRepository.saveAll(beneficiaryProductsList);
+
+        return beneficiaryProductsDTO;
+    }
+
+
+    public BeneficiaryProductsDTO findBeneficiaryProducts(Long id){
+       List<SimpleProductDTO> simpleProductDTOS = beneficiaryProductsRepository.findAllByBeneficiaryId(id)
+               .stream()
+               .map(p -> SimpleProductDTO.builder()
+                       .id(p.getProduct().getId())
+                       .name(p.getProduct().getName())
+                       .quantity(p.getQuantity())
+                       .build())
+               .toList();
+
+
+       return BeneficiaryProductsDTO.builder()
+               .beneficiaryId(id)
+               .productsDTO(simpleProductDTOS)
+               .build();
+    }
+
+    @Override
+    public Long benefitBeneficiary(Long id) {
+        return null;
     }
 
     @Override

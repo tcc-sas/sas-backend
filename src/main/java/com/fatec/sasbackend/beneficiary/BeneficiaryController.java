@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/beneficiary")
@@ -83,6 +85,30 @@ public class BeneficiaryController {
     public ResponseEntity<HttpStatus> deleteBeneficiary(@RequestParam String id) {
         beneficiaryService.deleteBeneficiary(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/register-beneficiary-product")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<BeneficiaryProductsDTO> registerBeneficiaryProducts(@RequestBody BeneficiaryProductsDTO beneficiaryProductsDTO) {
+        BeneficiaryProductsDTO beneficiaryProductsDTOS = beneficiaryService.registerBeneficiaryProducts(beneficiaryProductsDTO);
+        return ResponseEntity.ok().body(beneficiaryProductsDTOS);
+    }
+
+    @GetMapping("/beneficiary-products")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<BeneficiaryProductsDTO> findBeneficiaryProducts(@RequestParam String id) {
+        BeneficiaryProductsDTO beneficiaryProductsDTOS = beneficiaryService.findBeneficiaryProducts(Long.parseLong(id));
+        return ResponseEntity.ok().body(beneficiaryProductsDTOS);
+    }
+
+
+    @PostMapping("/benefit-beneficiary")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<Long> benefitBeneficiary(@RequestBody Long id) {
+
+        Long beneficiaryId = beneficiaryService.benefitBeneficiary(id);
+
+        return ResponseEntity.ok().body(beneficiaryId);
     }
 
 }

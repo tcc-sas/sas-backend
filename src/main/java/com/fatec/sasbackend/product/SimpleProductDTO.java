@@ -13,4 +13,5 @@ public class SimpleProductDTO {
 
     private Long id;
     private String name;
+    private Integer quantity;
 }
