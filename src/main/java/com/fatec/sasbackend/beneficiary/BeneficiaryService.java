@@ -3,6 +3,8 @@ package com.fatec.sasbackend.beneficiary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface BeneficiaryService {
 
     BeneficiaryDTO registerBeneficiary(BeneficiaryDTO beneficiaryDTO);
@@ -11,6 +13,12 @@ public interface BeneficiaryService {
     BeneficiarySelectOptionsDTO findSelectOptions();
     Page<BeneficiaryDTO> findPagedBeneficiaryByFilter(String name, String rg, String cpf, String cras, Pageable pageable);
     BeneficiaryDTO updateBeneficiary(BeneficiaryDTO model);
+
+    BeneficiaryProductsDTO registerBeneficiaryProducts(BeneficiaryProductsDTO beneficiaryProductsDTO);
+
+    BeneficiaryProductsDTO findBeneficiaryProducts(Long id);
+
+    Boolean benefitBeneficiary(Long id);
 
     void deleteBeneficiary(String id);
 }
