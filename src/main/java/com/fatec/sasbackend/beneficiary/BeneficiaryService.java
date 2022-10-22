@@ -18,7 +18,7 @@ public interface BeneficiaryService {
 
     BeneficiaryProductsDTO findBeneficiaryProducts(Long id);
 
-    Long benefitBeneficiary(Long id);
+    Boolean benefitBeneficiary(Long id);
 
     void deleteBeneficiary(String id);
 }

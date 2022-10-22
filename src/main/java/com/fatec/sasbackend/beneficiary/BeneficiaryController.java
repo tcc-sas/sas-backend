@@ -1,5 +1,6 @@
 package com.fatec.sasbackend.beneficiary;
 
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -104,11 +105,11 @@ public class BeneficiaryController {
 
     @PostMapping("/benefit-beneficiary")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Long> benefitBeneficiary(@RequestBody Long id) {
+    public ResponseEntity<Boolean> benefitBeneficiary(@RequestBody Long id) {
 
-        Long beneficiaryId = beneficiaryService.benefitBeneficiary(id);
+        Boolean isBeneficiated = beneficiaryService.benefitBeneficiary(id);
 
-        return ResponseEntity.ok().body(beneficiaryId);
+        return ResponseEntity.ok().body(isBeneficiated);
     }
 
 }
