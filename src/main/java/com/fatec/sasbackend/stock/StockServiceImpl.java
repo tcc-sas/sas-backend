@@ -42,7 +42,7 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Page<StockDTO> findPagedStockByFilter(Pageable pageable, Long productId, Long crasId) {
+    public Page<StockDTO> findPagedStockByFilter(Pageable pageable, String productId, String crasId) {
         return stockRepository.findPagedStockByFilter(
                         productId,
                         crasId,

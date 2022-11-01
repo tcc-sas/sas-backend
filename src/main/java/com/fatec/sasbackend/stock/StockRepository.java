@@ -16,15 +16,15 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query(
             " SELECT s " +
                     " FROM Stock s " +
-                    "LEFT JOIN s.product p "+
-                    "LEFT JOIN s.cras c "+
+                    " JOIN s.product p "+
+                    " JOIN s.cras c "+
                 "WHERE " +
-                    " (:product is null OR p.id = :product) " +
-                    " AND (:cras is null OR c.id = :cras)"
+                    " (:product = '' OR p.id = :product) " +
+                    " AND (:cras = '' OR c.id = :cras)"
     )
     Page<Stock> findPagedStockByFilter(
-            @Param("product") Long product,
-            @Param("cras") Long cras,
+            @Param("product") String product,
+            @Param("cras") String cras,
             Pageable pageable);
 
 

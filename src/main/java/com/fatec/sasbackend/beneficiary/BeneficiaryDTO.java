@@ -1,6 +1,6 @@
 package com.fatec.sasbackend.beneficiary;
 
-import com.fatec.sasbackend.converter.LocalDateConverter;
+import com.fatec.sasbackend.util.converter.LocalDateConverter;
 import com.fatec.sasbackend.cras.CrasDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -32,8 +32,8 @@ public class StockController {
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<StockDTO>> findPagedStockByFilter(
-            @RequestParam(name = "product") Long product,
-            @RequestParam(name = "cras") Long cras,
+            @RequestParam(name = "product") String product,
+            @RequestParam(name = "cras") String cras,
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<StockDTO> filteredStock = stockService.findPagedStockByFilter(pageable, product, cras);

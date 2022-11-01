@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.converter;
+package com.fatec.sasbackend.util.converter;
 
 public interface Converter<E, D> {
     E fromDtoToEntity(E entity, D dto);

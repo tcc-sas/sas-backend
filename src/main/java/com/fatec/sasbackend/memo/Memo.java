@@ -1,6 +1,6 @@
 package com.fatec.sasbackend.memo;
 
-import com.fatec.sasbackend.converter.LocalDateTimeConverter;
+import com.fatec.sasbackend.util.converter.LocalDateTimeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

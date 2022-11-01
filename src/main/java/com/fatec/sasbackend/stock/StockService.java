@@ -9,7 +9,7 @@ import java.util.List;
 public interface StockService {
 
     Page<StockDTO> findAllStock(Pageable pageable);
-    Page<StockDTO> findPagedStockByFilter(Pageable pageable, Long product, Long cras);
+    Page<StockDTO> findPagedStockByFilter(Pageable pageable, String product, String cras);
     List<Stock> saveInStock(List<StockDTO> dto);
     StockRegistrationOptionsDTO findRegistrationOptions();
     StockSelectOptions findSelectOptions();

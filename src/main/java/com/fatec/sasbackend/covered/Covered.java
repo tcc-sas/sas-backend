@@ -1,9 +1,7 @@
-package com.fatec.sasbackend.beneficiaryrecords;
+package com.fatec.sasbackend.covered;
 
-import com.fatec.sasbackend.beneficiary.Beneficiary;
 import com.fatec.sasbackend.util.converter.LocalDateConverter;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,25 +12,25 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Builder
-@Table(name = "beneficiary_records")
-public class BeneficiaryRecords {
+@Table(name = "vw_covered")
+public class Covered {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "beneficiary_id")
+    private Long beneficiaryId;
 
-    @ManyToOne
-    @JoinColumn(name = "beneficiary_id", referencedColumnName = "id")
-    private Beneficiary beneficiary;
+    @Column(name = "beneficiary_name")
+    private String beneficiaryName;
 
+    @Column(name = "beneficiary_cpf")
+    private String beneficiaryCpf;
+
+    @Column(name = "cras_name")
+    private String crasName;
 
     @Convert(converter = LocalDateConverter.class)
     @Column(name = "benefit_delivery_date")
     private LocalDate benefitDeliveryDate;
-
-
-
-
 }

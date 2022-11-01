@@ -1,4 +1,4 @@
-package com.fatec.sasbackend.converter;
+package com.fatec.sasbackend.util.converter;
 
 import javax.persistence.AttributeConverter;
 import java.sql.Date;
